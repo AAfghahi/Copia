@@ -45,10 +45,13 @@ def equals(hash1, hash2)
     # Another simple case check. This is O(n) time check, since hash lookup is o(1) but we are iterating through the first hash. Basically we are making sure that every single key is the same. 
     #If we are at this point then the lengths and keys are the same, and we are in O(n) time and O(2?) space complexity. Now what we have to do is go through and check that the values are the same. 
     hash1.each_key do |k|
-        if hash1[k].is_a?(Hash)
-            if !check(hash1[k], hash2[k])
+        if hash1[k].is_a?(Hash) && hash2[k].is_a?(Hash) #both of them need to be hashes in order for me to do this check. 
+            if !hash_check(hash1[k], hash2[k])
                 return false
             end
+        elsif hash1[k].is_a?(Array) && 
+            array = hash1[k] - hash2[k]
+            return false if !array.empty? #If the difference between these two isn't an empty array, then they aren't the same. 
         else
             if hash1[k] != hash2[k]
                 return false
@@ -58,7 +61,7 @@ def equals(hash1, hash2)
     return true 
 end
 
-def check(hash1, hash2)
+def hash_check(hash1, hash2)
     hash1.each_key do |k|
         if hash2[k] != hash1[k]
             return false
